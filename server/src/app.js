@@ -2,8 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const routes = require('./routes');
 
-const pool = require('./config/mariadb');
-
 const app = express();
 
 app.use(express.json());

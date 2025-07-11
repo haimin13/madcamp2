@@ -21,12 +21,28 @@ const getUserById = async (id) => {
     return rows;
 }
 
-const verifyUser = async (id) => {
+const verifyUser = async (jwtToken) => {
+    try {
+        const tokenParts = jwtToken.split('.');
+        const payload = tokenParts[1];
+        const decodedPayload = Buffer.from(payload, 'base64').toString('utf8');
+        console.log(decodedPayload);
+
+        const userInfo = JSON.parse(decodedPayload);
+        const result = {
+            sub: userInfo.sub,
+            email: userInfo.email,
+        }
+        return result;
+    } catch (e) {
+        return false
+    }
     
 }
 
 module.exports = {
     createUser,
     getAllUsers,
-    getUserById
+    getUserById,
+    verifyUser
 };
