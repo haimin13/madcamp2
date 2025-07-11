@@ -5,8 +5,8 @@ const createRecord = async (record) => {
     "VALUES (?, ?, ?, ?, ?)";
     const [result] = await pool.query(query, [
         record.user_id, 
-        record.username1, 
-        record.username2, 
+        record.username1 || 'user1', 
+        record.username2 || 'user2', 
         record.map_id, 
         record.time_record
     ]);
