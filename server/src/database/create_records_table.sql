@@ -5,5 +5,5 @@ CREATE TABLE records (
     username2 VARCHAR(128),
     map_id INT NOT NULL,
     time_record TIMESTAMP,
-    created_at DATETIME
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP()
 )

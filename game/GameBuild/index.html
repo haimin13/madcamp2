@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>2D Game Login</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+    #username-panel, #unity-container {
+      display: none;
+      margin-top: 20px;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    canvas {
+      width: 100%;
+      height: 600px;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ 구글 로그인 -->
+  <div id="g_id_onload"
+       data-client_id="1009056767136-3nvdq3kqtin0l7a77n3mk6ib0mil65av.apps.googleusercontent.com"
+       data-callback="onGoogleLoginSuccess"
+       data-auto_prompt="false">
+  </div>
+  <div class="g_id_signin"
+       data-type="standard"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular"
+       data-logo_alignment="left">
+  </div>
+
+  <!-- ✅ 로그인 후: 이름 입력 -->
+  <div id="username-panel">
+    <h2>플레이어 이름을 입력하세요</h2>
+    <input type="text" id="username1" placeholder="Username 1"><br>
+    <input type="text" id="username2" placeholder="Username 2"><br>
+    <button onclick="startGame()">게임 시작</button>
+  </div>
+
+  <!-- ✅ 게임 영역 -->
+  <div id="unity-container">
+    <canvas id="unity-canvas"></canvas>
+  </div>
+
+  <script>
+    let idToken = null;
+
+    function onGoogleLoginSuccess(response) {
+      idToken = response.credential;
+      console.log("✅ 로그인 성공! ID Token:", idToken);
+
+      // 로그인 버튼 숨기고 → 이름 입력창 보이기
+      document.querySelector(".g_id_signin").style.display = "none";
+      document.getElementById("username-panel").style.display = "block";
+    }
+
+    function startGame() {
+      const username1 = document.getElementById("username1").value.trim();
+      const username2 = document.getElementById("username2").value.trim();
+
+      if (!username1 || !username2) {
+        alert("두 플레이어 이름을 모두 입력하세요.");
+        return;
+      }
+
+      document.getElementById("username-panel").style.display = "none";
+      document.getElementById("unity-container").style.display = "block";
+
+      const buildUrl = "Build";
+      const loaderUrl = buildUrl + "/GameBuild.loader.js"; // 실제 파일명에 맞게 수정
+      const config = {
+        dataUrl: buildUrl + "/GameBuild.data",
+        frameworkUrl: buildUrl + "/GameBuild.framework.js",
+        codeUrl: buildUrl + "/GameBuild.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "MyCompany",
+        productName: "2D_Project",
+        productVersion: "1.0"
+      };
+
+      const canvas = document.getElementById("unity-canvas");
+
+      const script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          console.log("Loading progress:", progress);
+        }).then((unityInstance) => {
+          // ✅ 유니티로 데이터 전달
+          unityInstance.SendMessage("GameManager", "OnGoogleLogin", idToken);
+          unityInstance.SendMessage("GameManager", "SetPlayerNames", username1 + "," + username2);
+        });
+      };
+
+      document.body.appendChild(script);
+    }
+  </script>
+</body>
+</html>

@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 7f;
     private Rigidbody2D rb;
     private bool isGrounded;
+    private bool hasStarted = false;
 
     void Start()
     {
@@ -16,6 +17,12 @@ public class PlayerMovement : MonoBehaviour
     {
         float h = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(h * moveSpeed, rb.linearVelocity.y);
+
+        if (!hasStarted && (Mathf.Abs(h) > 0.01f || Input.GetButtonDown("Jump")))
+        {
+            GameManager.Instance.StartTimer();
+            hasStarted = true;
+        }
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -45,6 +52,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("You Win!");
             Time.timeScale = 0;
+
+            GameManager.Instance.StopTimer();
 
             GameObject.Find("UIManager").GetComponent<GameUIController>().ShowWinUI();
         }
