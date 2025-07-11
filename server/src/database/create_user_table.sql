@@ -1,8 +1,7 @@
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id_google VARCHAR(128) UNIQUE KEY,
-    username1 VARCHAR(128),
-    username2 VARCHAR(128),
-    email VARCHAR(128),
+    id_google VARCHAR(128) NOT NULL UNIQUE KEY,
+    username1 VARCHAR(128) DEFAULT 'user1',
+    username2 VARCHAR(128) DEFAULT 'user2',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP()
 )

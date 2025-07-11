@@ -12,7 +12,10 @@ class Record {
     static validate(data) {
         const errors = [];
         if (!data.user_id) errors.push('user_id is required');
+        if (!data.username1) errors.push('username1 is required');
+        if (!data.username2) errors.push('username2 is required');
         if (!data.map_id) errors.push('map_id is required');
+        if (!data.time_record) errors.push('time_record is required');
         return errors;
     }
 }

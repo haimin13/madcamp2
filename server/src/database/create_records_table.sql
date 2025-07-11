@@ -4,6 +4,6 @@ CREATE TABLE records (
     username1 VARCHAR(128),
     username2 VARCHAR(128),
     map_id INT NOT NULL,
-    time_record TIMESTAMP,
+    time_record TIME,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP()
 )
