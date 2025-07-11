@@ -29,7 +29,7 @@ public class GameUIController : MonoBehaviour
 
     public void OnClickSaveRecord()
     {
-        string mapId = "map1"; // 혹은 동적으로 받을 수도 있음
+        int mapId = 1; // 혹은 동적으로 받을 수도 있음
         float time = GameManager.Instance.GetFinalTime();
         GameManager.Instance.SendRecordToServer(mapId, time);
 

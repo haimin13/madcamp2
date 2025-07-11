@@ -2,14 +2,15 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Text;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     public string googleIdToken;
-    public string username1;
-    public string username2;
+    public string user_name1;
+    public string user_name2;
 
     private float startTime;
     private bool isRunning = false;
@@ -30,9 +31,9 @@ public class GameManager : MonoBehaviour
         string[] split = names.Split(',');
         if (split.Length >= 2)
         {
-            username1 = split[0].Trim();
-            username2 = split[1].Trim();
-            Debug.Log("플레이어1: " + username1 + " / 플레이어2: " + username2);
+            user_name1 = split[0].Trim();
+            user_name2 = split[1].Trim();
+            Debug.Log("플레이어1: " + user_name1 + " / 플레이어2: " + user_name2);
         }
         else
         {
@@ -76,62 +77,103 @@ public class GameManager : MonoBehaviour
         return currentTime;
     }
 
-    // 예: 서버로 기록 저장 (추후 사용)
-    public void SendRecordToServer(string mapId, float timeRecord)
-    {
-        Debug.Log("서버로 전송할 정보:");
-        Debug.Log("ID Token: " + googleIdToken);
-        Debug.Log("Username1: " + username1);
-        Debug.Log("Username2: " + username2);
-        Debug.Log("Map ID: " + mapId);
-        Debug.Log("Time Record: " + timeRecord);
-        StartCoroutine(PostRecordCoroutine(mapId, timeRecord));
-    }
-
     [System.Serializable]
     public class RecordData
     {
-        public string user_id_google;
+        public int user_id;
         public string username1;
         public string username2;
-        public string map_id;
-        public string time_record;
+        public int map_id;
+        public float time_record;
     }
 
-    private IEnumerator PostRecordCoroutine(string mapId, float timeRecord)
+    // 예: 서버로 기록 저장 (추후 사용)
+    public void SendRecordToServer(int currentMapId, float time)
     {
-        string url = "http://127.0.0.1:3000/api/records"; // ✅ 여기를 실제 서버 URL로 바꿔줘
-
-        // JSON 만들기
-        var jsonData = new RecordData
+        RecordData data = new RecordData
         {
-            user_id_google = googleIdToken,
-            username1 = username1,
-            username2 = username2,
-            map_id = mapId,
-            time_record = timeRecord.ToString("F2")
+            user_id = 1,
+            username1 = user_name1,
+            username2 = user_name2,
+            map_id = currentMapId,
+            time_record = time
         };
+        StartCoroutine(PostRequest("http://127.0.0.1:3000/api/records", data));
+    }    
 
-        string json = JsonUtility.ToJson(jsonData);
+    // public void SendRecordToServer(string mapId, float timeRecord)
+    // {
+    //     Debug.Log("서버로 전송할 정보:");
+    //     Debug.Log("ID Token: " + googleIdToken);
+    //     Debug.Log("Username1: " + username1);
+    //     Debug.Log("Username2: " + username2);
+    //     Debug.Log("Map ID: " + mapId);
+    //     Debug.Log("Time Record: " + timeRecord);
+    //     StartCoroutine(PostRecordCoroutine(mapId, timeRecord));
+    // }
 
-        // UnityWebRequest 준비
-        UnityWebRequest request = new UnityWebRequest(url, "POST");
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+    private IEnumerator PostRequest(string url, RecordData data)
+    {
+        string jsonData = JsonUtility.ToJson(data);
+        var request = new UnityWebRequest(url, "Post");
+
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
 
-        Debug.Log("전송 중: " + json);
+        request.SetRequestHeader("Content-Type", "application/json");
+        Debug.Log("서버로 전송할 데이터: " + jsonData);
 
         yield return request.SendWebRequest();
 
-        if (request.result == UnityWebRequest.Result.Success)
+        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
         {
-            Debug.Log("기록 전송 성공: " + request.downloadHandler.text);
+            Debug.LogError("기록 전송 실패: " + request.error);
+            Debug.LogError("서버 응답: " + request.downloadHandler.text);
         }
         else
         {
-            Debug.LogError("기록 전송 실패: " + request.error);
+            Debug.Log("기록 전송 성공!");
+            Debug.Log("서버 응답: " + request.downloadHandler.text);
         }
-    }
+
+        request.Dispose();
+    }    
+
+    // private IEnumerator PostRecordCoroutine(string mapId, float timeRecord)
+    // {
+    //     string url = "http://127.0.0.1:3000/api/records"; // ✅ 여기를 실제 서버 URL로 바꿔줘
+
+    //     // JSON 만들기
+    //     var jsonData = new RecordData
+    //     {
+    //         user_id_google = googleIdToken,
+    //         username1 = username1,
+    //         username2 = username2,
+    //         map_id = mapId,
+    //         time_record = timeRecord.ToString("F2")
+    //     };
+
+    //     string json = JsonUtility.ToJson(jsonData);
+
+    //     // UnityWebRequest 준비
+    //     UnityWebRequest request = new UnityWebRequest(url, "POST");
+    //     byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+    //     request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+    //     request.downloadHandler = new DownloadHandlerBuffer();
+    //     request.SetRequestHeader("Content-Type", "application/json");
+
+    //     Debug.Log("전송 중: " + json);
+
+    //     yield return request.SendWebRequest();
+
+    //     if (request.result == UnityWebRequest.Result.Success)
+    //     {
+    //         Debug.Log("기록 전송 성공: " + request.downloadHandler.text);
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("기록 전송 실패: " + request.error);
+    //     }
+    // }
 }
