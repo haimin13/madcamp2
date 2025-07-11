@@ -1,4 +1,5 @@
 const recordService = require('../services/recordService');
+const validateRecord = require('../middleware/dataValidation')
 
 const createRecord = async (req, res) => {
     try {

@@ -1,13 +1,13 @@
 require('dotenv').config();
 const express = require('express');
-const recordRoutes = require('./routes/recordRoutes');
+const routes = require('./routes');
 
 const pool = require('./config/mariadb');
 
 const app = express();
 
 app.use(express.json());
-app.use('/api', recordRoutes);
+app.use('/api', routes);
 
 app.get('/', async (req, res) => {
     try {
