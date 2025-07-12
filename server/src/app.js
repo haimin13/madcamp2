@@ -10,6 +10,10 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', routes);
 
+app.get('/game', (req, res) => {
+    res.sendFile(path.join(__dirname, "../GameBuild",'index.html'))
+})
+
 app.get('/', async (req, res) => {
     try {
         res.status(200).send("서버 실행중!");
