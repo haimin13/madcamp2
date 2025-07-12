@@ -7,6 +7,7 @@ using System.Text;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public string serverUrl;
 
     public string googleIdToken;
     public string user_name1;
@@ -59,6 +60,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetServerUrl(string url)
+    {
+        serverUrl = url;
+        Debug.Log("Received Server");
+    }
+
     public void StartTimer()
     {
         startTime = Time.time;
@@ -98,7 +105,7 @@ public class GameManager : MonoBehaviour
             map_id = currentMapId,
             time_record = time
         };
-        StartCoroutine(PostRequest("http://127.0.0.1:3000/api/records", data));
+        StartCoroutine(PostRequest(serverUrl, data));
     }    
 
     // public void SendRecordToServer(string mapId, float timeRecord)
