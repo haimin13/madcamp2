@@ -1,0 +1,16 @@
+{
+	"iss": "https://accounts.google.com",
+	"azp": "1009056767136-3nvdq3kqtin0l7a77n3mk6ib0mil65av.apps.googleusercontent.com",
+	"aud": "1009056767136-3nvdq3kqtin0l7a77n3mk6ib0mil65av.apps.googleusercontent.com",
+	"sub": "104680974809331859606",
+	"email": "kitty1061107@gmail.com",
+	"email_verified": true,
+	"nbf": 1752221872,
+	"name": "김재헌",
+	"picture": "https://lh3.googleusercontent.com/a/ACg8ocLd85dJFvNKmZmgVBtMf5YCY02z5bruFQSZhIJOi_jVo1s93trJ=s96-c",
+	"given_name": "재헌",
+	"family_name": "김",
+	"iat": 1752222172,
+	"exp": 1752225772,
+	"jti": "387caf877e4b4fc0530cff1e19141ef3af187195"
+}
