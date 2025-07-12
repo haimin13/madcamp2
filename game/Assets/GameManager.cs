@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator PostRequest(string url, RecordData data)
     {
         string jsonData = JsonUtility.ToJson(data);
-        var request = new UnityWebRequest(url, "Post");
+        var request = new UnityWebRequest(url, "POST");
 
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
