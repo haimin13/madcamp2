@@ -5,16 +5,8 @@ const routes = require('./routes');
 
 const app = express();
 
-const corsOptions = {
-    origin: [
-        'http://localhost:3000',
-        'http://16.176.11.76:3000'
-    ],
-    credentials: true,
-    optionsSuccessStatus: 200
-};
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', routes);
