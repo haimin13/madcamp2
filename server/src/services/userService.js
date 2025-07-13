@@ -1,25 +1,23 @@
 const pool = require('../config/mariadb');
 
-const createUser = async (user) => {
+const createUser = async (sub) => {
     const query = "INSERT INTO users (id_google) " +
     "VALUES (?)";
-    const [result] = await pool.query(query, [
-        user.id_google
-    ]);
+    const [result] = await pool.query(query, [sub]);
     return { id: result.insertId, ...user};
 };
 
 const getAllUsers = async () => {
-    const query = 'SELECT * FROM users';
+    const query = 'SELECT id, username1, username2 FROM users';
     const [rows] = await pool.query(query);
     return rows;
 };
 
-const getUserById = async (id) => {
-    const query = 'SELECT * FROM users WHERE id_google = ?';
-    const [rows] = await pool.query(query, [id]);
-    return rows;
-}
+const getUserBySub = async (sub) => {
+    const query = 'SELECT id, username1, username2 FROM users WHERE id_google = ?';
+    const [rows] = await pool.query(query, [sub]);
+    return rows[0];
+};
 
 const verifyUser = async (jwtToken) => {
     try {
@@ -37,12 +35,31 @@ const verifyUser = async (jwtToken) => {
     } catch (e) {
         return false
     }
+};
+
+const getUserById = async (id) => {
+    const query = 'SELECT * FROM users WHERE id = ?';
+    const [rows] = await pool.query(query, [id]);
+    return rows[0];
+};
+
+const updateUser = async (userId, username1, username2) => {
+    const query = "UPDATE users SET username1 = ?, username2 = ? WHERE id = ?";
+    const [result] = await pool.query(query, [username1, username2, userId]);
     
-}
+    return {
+        id: userId,
+        username1: username1,
+        username2: username2,
+        updated: true
+    };
+};
 
 module.exports = {
     createUser,
     getAllUsers,
+    getUserBySub,
+    verifyUser,
     getUserById,
-    verifyUser
+    updateUser
 };

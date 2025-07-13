@@ -4,9 +4,11 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const { validateuser } = require('../middleware/dataValidation');
 
-router.post('/', userController.createUser);
+router.post('/:sub', userController.createUser);
 router.get('/', userController.getAllUsers);
 router.get('/verify', userController.verifyUser);
-router.get('/:id', userController.getUserById);
+router.get('/sub/:sub', userController.getUserBySub);
+router.get('/id/:id', userController.getUserById);
+router.put('/:id', userController.updateUser);
 
 module.exports = router
