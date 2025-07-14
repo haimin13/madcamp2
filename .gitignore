@@ -17,6 +17,8 @@ node_modules/
 *.key
 *.pem
 *.cert
+/server/src/GameBuild/*
+!/server/src/GameBuild/index.html
 
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
 *.blend1

@@ -4,9 +4,9 @@ const validateRecord = require('../middleware/dataValidation')
 const createRecord = async (req, res) => {
     try {
         const record = await recordService.createRecord(req.body);
-        res.status(201).json(record);
+        res.status(201).send('Record created successfully');
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).send(`Failed to create record: ${error.message}`);
     }
 };
 

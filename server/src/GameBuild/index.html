@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity Web Player | My project</title>
+  <link rel="shortcut icon" href="TemplateData/favicon.ico">
+  <link rel="stylesheet" href="TemplateData/style.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    #google-login-panel {
+      display: block;
+      text-align: center;
+      margin-top: 50px;
+      background: #111;
+      color: white;
+      padding: 20px;
+    }
+    #unity-container {
+      display: none;
+    }
+    .g_id_signin {
+      margin: 20px auto;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Google 로그인 패널 -->
+  <div id="google-login-panel">
+    <h2>게임에 로그인하세요</h2>
+    <div id="g_id_onload"
+         data-client_id="1009056767136-3nvdq3kqtin0l7a77n3mk6ib0mil65av.apps.googleusercontent.com"
+         data-callback="onGoogleLoginSuccess"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+    </div>
+  </div>
+
+  <!-- Unity 게임 컨테이너 -->
+  <div id="unity-container" class="unity-desktop">
+    <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+    <div id="unity-loading-bar">
+      <div id="unity-logo"></div>
+      <div id="unity-progress-bar-empty">
+        <div id="unity-progress-bar-full"></div>
+      </div>
+    </div>
+    <div id="unity-warning"> </div>
+    <div id="unity-footer">
+      <div id="unity-logo-title-footer"></div>
+      <div id="unity-fullscreen-button"></div>
+      <div id="unity-build-title">My project</div>
+    </div>
+  </div>
+
+  <script>
+    let unityInstance = null;
+    let idToken = null;
+
+    // Google 로그인 성공 콜백
+    function onGoogleLoginSuccess(response) {
+      idToken = response.credential;
+      console.log("✅ Google 로그인 성공! ID Token:", idToken);
+
+      // 로그인 패널 숨기고 Unity 게임 시작
+      document.getElementById("google-login-panel").style.display = "none";
+      document.getElementById("unity-container").style.display = "block";
+
+      // Unity 게임 로드
+      loadUnityGame();
+    }
+
+    function loadUnityGame() {
+      var canvas = document.querySelector("#unity-canvas");
+
+      // Unity 배너 표시 함수
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/GameBuild.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/GameBuild.data",
+        frameworkUrl: buildUrl + "/GameBuild.framework.js",
+        codeUrl: buildUrl + "/GameBuild.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "My project",
+        productVersion: "0.1.0",
+        showBanner: unityShowBanner,
+      };
+
+      // 모바일 디바이스 감지 및 설정
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        document.querySelector("#unity-container").className = "unity-mobile";
+        canvas.className = "unity-mobile";
+      } else {
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
+      }
+
+      document.querySelector("#unity-loading-bar").style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+        }).then((unityInstanceResult) => {
+          unityInstance = unityInstanceResult;
+          
+          document.querySelector("#unity-loading-bar").style.display = "none";
+          document.querySelector("#unity-fullscreen-button").onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+
+          // ✅ Unity 로드 완료 후 Google ID Token 전달
+          if (idToken) {
+            console.log("Unity에 ID Token 전달:", idToken);
+            unityInstance.SendMessage("StartScreenManager", "OnGoogleLogin", idToken);
+          }
+
+        }).catch((message) => {
+          alert("Unity 로드 실패: " + message);
+        });
+      };
+
+      document.body.appendChild(script);
+    }
+  </script>
+</body>
+</html>
