@@ -126,6 +126,11 @@
           document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
         }).then((unityInstanceResult) => {
           unityInstance = unityInstanceResult;
+		  
+		  const baseUrl = window.location.origin + ":3000"; // 포트번호 포함 가능
+		  unityInstance.SendMessage("GameDataManager", "SetBaseUrl", baseUrl);
+
+		  console.log("✅ Unity에 baseUrl 전달 완료:", baseUrl);
           
           document.querySelector("#unity-loading-bar").style.display = "none";
           document.querySelector("#unity-fullscreen-button").onclick = () => {
