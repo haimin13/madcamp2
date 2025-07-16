@@ -33,6 +33,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use('/game/Build', express.static(path.join(__dirname, 'GameBuild', 'Build')));
+app.use('/game/TemplateData', express.static(path.join(__dirname, 'GameBuild', 'TemplateData')));
 
 app.use('/api', routes);
 
