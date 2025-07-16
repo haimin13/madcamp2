@@ -127,7 +127,7 @@
         }).then((unityInstanceResult) => {
           unityInstance = unityInstanceResult;
 		  
-		  const baseUrl = window.location.origin + ":3000"; // 포트번호 포함 가능
+		  const baseUrl = window.location.origin; // 포트번호 포함
 		  unityInstance.SendMessage("GameDataManager", "SetBaseUrl", baseUrl);
 
 		  console.log("✅ Unity에 baseUrl 전달 완료:", baseUrl);
