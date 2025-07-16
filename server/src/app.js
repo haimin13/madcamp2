@@ -18,6 +18,8 @@ app.use((req, res, next) => {
         res.type('application/javascript');
     } else if (req.url.endsWith('.gz')) {
         res.set('Content-Encoding', 'gzip');
+    } else if (req.url.endsWith('.br')) {
+        res.set('Content-Encoding', 'br');
     }
     next();
 });
