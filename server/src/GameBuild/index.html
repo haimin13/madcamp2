@@ -104,14 +104,15 @@
       var loaderUrl = buildUrl + "/GameBuild.loader.js";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/GameBuild.data",
-        frameworkUrl: buildUrl + "/GameBuild.framework.js",
-        codeUrl: buildUrl + "/GameBuild.wasm",
+        dataUrl: buildUrl + "/GameBuild.data.br",
+        frameworkUrl: buildUrl + "/GameBuild.framework.js.br",
+        codeUrl: buildUrl + "/GameBuild.wasm.br",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "My project",
         productVersion: "0.1.0",
         showBanner: unityShowBanner,
+        decompressionFallback: true   // 🔥 브라우저가 알아서 Brotli 풀도록
       };
       
       canvas.style.width = "960px";
