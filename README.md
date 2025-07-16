@@ -43,9 +43,9 @@
 | 장면 설명 | 이미지 |
 |-----------|--------|
 | 로그인 화면 | ![](./images/scene1.png) |
-| 유저 정보 입력 화면 | ![](./images/apple.png) |
-| 맵 선택 및 기록 저장 화면 | ![](./images/rope.png) |
-| 게임 화면 | ![](./images/clear.png) |
+| 유저 정보 입력 화면 | <img width="320" height="240" alt="Image" src="https://github.com/user-attachments/assets/ec56c5eb-07b7-49d3-87e6-6b684b863c29" /> |
+| 맵 선택 및 기록 저장 화면 | <img width="320" height="240" alt="Image" src="https://github.com/user-attachments/assets/87544bae-c982-4895-a6a6-032f12812076" /> |
+| 게임 화면 | <img width="320" height="240" alt="Image" src="https://github.com/user-attachments/assets/5cc0958c-bb97-428d-8c54-6bb53db929c9" /> |
 
 ## ⚙️ 조작 방법
 
