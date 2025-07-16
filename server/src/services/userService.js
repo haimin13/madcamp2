@@ -1,10 +1,10 @@
 const pool = require('../config/mariadb');
 
 const createUser = async (sub) => {
-    const query = "INSERT INTO users (id_google) " +
-    "VALUES (?)";
+    const query = "INSERT INTO users (id_google) VALUES (?)";
     const [result] = await pool.query(query, [sub]);
-    return { id: result.insertId, ...user};
+
+    return { id: result.insertId, id_google: sub };
 };
 
 const getAllUsers = async () => {
