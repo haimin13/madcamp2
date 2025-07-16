@@ -18,6 +18,15 @@ app.use((req, res, next) => {
         res.type('application/javascript');
     } else if (req.url.endsWith('.gz')) {
         res.set('Content-Encoding', 'gzip');
+    } else if (req.url.endsWith('.wasm.br')) {
+        res.set('Content-Type', 'application/wasm');
+        res.set('Content-Encoding', 'br');
+    } else if (req.url.endsWith('.js.br')) {
+        res.set('Content-Type', 'application/javascript');
+        res.set('Content-Encoding', 'br');
+    } else if (req.url.endsWith('.data.br')) {
+        res.set('Content-Type', 'application/octet-stream');
+        res.set('Content-Encoding', 'br');
     } else if (req.url.endsWith('.br')) {
         res.set('Content-Encoding', 'br');
     }
