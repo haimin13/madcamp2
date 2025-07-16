@@ -51,10 +51,22 @@
 
 | 장면 설명 | 이미지 |
 |-----------|--------|
-| 메인 캐릭터 등장 | ![](./images/scene포
+| 로그인 화면 | ![](./images/scene1.png) |
+| 유저 정보 입력 화면 | ![](./images/apple.png) |
+| 맵 선택 및 기록 저장 화면 | ![](./images/rope.png) |
+| 게임 화면 | ![](./images/clear.png) |
 
-### ✅ APK 설치
-```bash
-1. 위의 링크에서 APK 파일 다운로드
-2. Android 기기에서 설치 허용
-3. 게임 실행!
+## ⚙️ 조작 방법
+
+| Action       | Player 1 | Player 2 |
+|--------------|----------|----------|
+| Move Left    |    A     |    ←    |
+| Move Right   |    D     |    →    |
+| Jump         |    W     |    ↑    |
+| Hold Down    |    S     |    ↓    |
+| Restart      |    R     |    -    |
+| Map Select   |   ESC    |    -    |
+
+> 🎮 줄의 물리 효과 때문에 **협동**하지 않으면 절대 클리어할 수 없습니다!
+
+---
