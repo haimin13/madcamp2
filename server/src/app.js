@@ -21,12 +21,12 @@ app.use((req, res, next) => {
     }
     next();
 });
-app.use('/game', express.static(path.join(__dirname, './GameBuild')));
+app.use('/game', express.static(path.join(__dirname, 'GameBuild')));
 
 app.use('/api', routes);
 
 app.get('/game', (req, res) => {
-    res.sendFile(path.join(__dirname, "./GameBuild",'index.html'))
+    res.sendFile(path.join(__dirname, "GameBuild",'index.html'))
 })
 
 app.get('/', async (req, res) => {
