@@ -13,8 +13,9 @@
 - **사용 기술**:  
   - Unity WebGL
   - OAuth 2.0 (Google Login)
-  - Maria DB
-  - 
+  - Nodejs
+  - MariaDB
+  - AWS EC2
 - **주요 기능**:
   - 🪢 줄로 연결된 캐릭터 협동 이동
   - 🍎 사과 3개 수집 시 탈출 가능
